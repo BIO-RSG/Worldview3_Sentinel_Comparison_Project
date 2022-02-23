@@ -2,10 +2,9 @@ library(raster)
 library(RStoolbox)
 
 
-wv.dat = brick("C://Users//wilsonkri//Documents//Backup-WV//20190811//Rasters//BOA-reflectance-20190811.tif")
+wv.dat = brick("C:\\Where\\is\\my\\data//BOA-reflectance-20190811.tif")
 names(wv.dat) = c("cb","b","g","y","r","re","n1","n2")
-s2.dat = stack("C://Users//wilsonkri//Documents//Backup-S2//Fixed-20160913//Processed//20160913Level2A.tif",
-               "C://Users//wilsonkri//Documents//Backup-WV//20190811//S-2Comparison//S2-v2//probability.tif")
+s2.dat = stack("C:\\Where\\is\\my\\data\\20160913Level2A.tif")
 names(s2.dat) = c("b","g","r","n","depth","ndvi","gndvi","class")
 
 #Crop the S-2 image to the WV image for speed
@@ -42,19 +41,19 @@ rm(s2.blue,s2.blue1,s2.blue2,s2.blue3,s2.blue4)
 
 #write out in batches and delete later
 writeRaster(s2.dat[[1:2]],
-            "C://Users//wilsonkri//Documents//Backup-Worldview-Data//20190811//S-2Comparison//S2-v2//s2-2m-reprj-tmp1.tif",
+            "C:\\Where\\is\\my\\data//S-2Comparison//S2-v2//s2-2m-reprj-tmp1.tif",
             format="GTiff",NAflag = NaN,overwrite=T)
 writeRaster(s2.dat[[3:5]],
-            "C://Users//wilsonkri//Documents//Backup-Worldview-Data//20190811//S-2Comparison//S2-v2//s2-2m-reprj-tmp2.tif",
+            "C:\\Where\\is\\my\\data\\S-2Comparison//S2-v2//s2-2m-reprj-tmp2.tif",
             format="GTiff",NAflag = NaN,overwrite=T)
-s2.dat = stack("C://Users//wilsonkri//Documents//Backup-Worldview-Data//20190811//S-2Comparison//S2-v2//s2-2m-reprj-tmp1.tif",
-               "C://Users//wilsonkri//Documents//Backup-Worldview-Data//20190811//S-2Comparison//S2-v2//s2-2m-reprj-tmp2.tif")
+s2.dat = stack("C:\\Where\\is\\my\\data\\S-2Comparison//S2-v2//s2-2m-reprj-tmp1.tif",
+               "C:\\Where\\is\\my\\data\\S-2Comparison//S2-v2//s2-2m-reprj-tmp2.tif")
 
 #Write out only downscaled and repojected data
 writeRaster(s2.dat,
-            "C://Users//wilsonkri//Documents//Backup-Worldview-Data//20190811//S-2Comparison//S2-v2//s2-2m-reprj.tif",
+            "C:\\Where\\is\\my\\data//S-2Comparison//S2-v2//s2-2m-reprj.tif",
             format="GTiff",NAflag = NaN,overwrite=T)
-s2.dat =brick( "C://Users//wilsonkri//Documents//Backup-Worldview-Data//20190811//S-2Comparison//S2-v2//s2-2m-reprj.tif")
+s2.dat =brick( "C:\\Where\\is\\my\\data\\S-2Comparison//S2-v2//s2-2m-reprj.tif")
 names(s2.dat) = c("b","g","r","depth","class")
 
 plot(s2.dat$b,xlim=c(527400,527420),ylim=c(4956080,4956100))
@@ -67,11 +66,11 @@ s2.shift = coregisterImages(slave=s2.dat[[c("b","g","r")]],
                             shiftInc = 0.5, #Times by resolution of raster so to go up by 1 need to set to 0.5
                             nSamples = 1e+05, reportStats = T)
 write.csv(s2.shift$MI, row.names = F,
-          "C:\\Users\\wilsonkri\\Documents\\Backup-Worldview-Data\\20190811\\S-2Comparison\\BestS2Shift-Destripe-BGR-fixprj.txt")
+          "C:\\Where\\is\\my\\data\\S-2Comparison\\BestS2Shift-Destripe-BGR-fixprj.txt")
 
 #Does the destripe versus uncorrected suggest different shifts
 library(pals)
-ds.dat = read.csv("C:\\Users\\wilsonkri\\Documents\\Backup-Worldview-Data\\20190811\\S-2Comparison\\BestS2Shift-Destripe-BGR-fixprj.txt")
+ds.dat = read.csv("C:\\Where\\is\\my\\data\\S-2Comparison\\BestS2Shift-Destripe-BGR-fixprj.txt")
 new.index = sort(ds.dat$mi, index=T,decreasing = T)
 ds.dat=ds.dat[new.index[[2]],]
 #boa.dat = read.csv("C:\\Users\\wilsonkri\\Documents\\Backup-Worldview-Data\\20190811\\S-2Comparison\\BestS2Shift-boa-BGR.txt")
@@ -126,7 +125,7 @@ s2.shift = coregisterImages(slave=s2.dat[[c("b","g","r")]],
 s2.class.out = s2.shift$coregImg[[1]]
 s2.class.out[] = as.matrix(s2.class)
 writeRaster(stack(s2.shift$coregImg,s2.class.out),
-            "C://Users//wilsonkri//Documents//Backup-Worldview-Data//20190811//S-2Comparison//NewRF-05052020-2ndvegadd//s2-2m-reprj-shiftboa.tif",
+            "C:\\Where\\is\\my\\data\\S-2Comparison//NewRF-05052020-2ndvegadd//s2-2m-reprj-shiftboa.tif",
             format="GTiff",NAflag = NaN,overwrite=T)
 
 #Coregister based on minimum shift with maximum MI for boa destriped wv data
@@ -154,13 +153,13 @@ shift.out = stack(s2.shift$coregImg,s2.depth.out,s2.class.out,s2.ndvi.out)
 #Match extent
 shift.out = crop(y=wv.dat,x=shift.out)
 #Mask where WV data is out of bounds
-wv.mask.ext = raster("C://Users//wilsonkri//Documents//Backup-WV//20190811//Rasters//TOA-reflectance-20190811.tif")
+wv.mask.ext = raster("C:\\Where\\is\\my\\data//Rasters//TOA-reflectance-20190811.tif")
 wv.mask.ext[wv.mask.ext>0] = 1
 wv.mask.ext = crop(y=shift.out,x=wv.mask.ext)
 shift.out = mask(x=shift.out, mask=wv.mask.ext)
 
 writeRaster(shift.out,
-            "C://Users//wilsonkri//Documents//Backup-WV//20190811//S-2Comparison//S2-v2//s2-2m-reprj-shiftds.tif",
+            "C:\\Where\\is\\my\\data\\S-2Comparison//S2-v2//s2-2m-reprj-shiftds.tif",
             format="GTiff",NAflag = NaN,overwrite=T)
 
 

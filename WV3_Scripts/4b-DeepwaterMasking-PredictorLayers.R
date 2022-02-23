@@ -1,7 +1,7 @@
 library(raster)
 library(RStoolbox)
 
-setwd("C://Users//wilsonkri//Documents//Backup-Worldview-Data//20190811//")
+setwd("C:\\Where\\is\\my\\data\\")
 
 wv.dat = brick("./Rasters/BOA-destripe.tif")
 names(wv.dat) = c("cb","b","g","y","r","re","n1","n2")

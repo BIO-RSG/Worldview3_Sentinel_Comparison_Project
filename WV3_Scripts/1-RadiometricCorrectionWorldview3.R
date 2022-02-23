@@ -1,20 +1,22 @@
-rm(list=ls())
 library(raster)
 library(XML)
 
 #Import files
-#this will only run on the multispectral files
-#Raster data
-ras.data = "C:\\Users\\wilsonkri\\Documents\\SatelliteData\\Worldview-Data-ESI\\012266432010_01\\012266432010_01_P001_MUL\\19AUG11151735-M2AS-012266432010_01_P001.tif"
-#Metadata file
-meta.file = "C:\\Users\\wilsonkri\\Documents\\SatelliteData\\Worldview-Data-ESI\\012266432010_01\\012266432010_01_P001_MUL\\19AUG11151735-M2AS-012266432010_01_P001.xml"
+#This will only run on the multispectral files
+#Raster data from data provider 
+ras.data = "C:\\Where\\is\\my\\data\\Wvdata.tif"
+#Metadata file from data provider 
+meta.file = "C:\\Where\\is\\my\\data\\Wvdata.xml"
 ##Data to output
-out.ras = "C:\\Users\\wilsonkri\\Documents\\SatelliteData\\Worldview-Data-ESI\\Processed\\20190811\\TOA-reflectance-20190811.tif"
-png.out = "C:\\Users\\wilsonkri\\Documents\\SatelliteData\\Worldview-Data-ESI\\Processed\\20190811\\TOA-reflectance-20190811.png"
+#This is the radiometric corrected TOA WV data
+out.ras = "C:\\Where\\i\\want\\my\\data\\TOA-reflectance.tif"
+#This is a density plot of the data to see the spread
+png.out = "C:\\Where\\i\\want\\my\\data\\TOA-reflectance.png"
 #
 
 #Define sensor specific gain and offset (these may change with time)
 #2018v0
+#obtain from data provider
 WV3gain = c(0.938,#coastal blue
             0.946,#blue
             0.958,#green
@@ -44,6 +46,8 @@ Esun = c(1757.890,#coastal blue
          858.770)#NR2
 ##
 
+
+##Everything below will run automatically
 #Extract Data out of the metadata information
 meta.file = xmlParse(meta.file)
 meta.file = xmlToList(meta.file)
@@ -97,12 +101,14 @@ rm(meta.file)
 #Read in Raster Data
 ras.data = brick(ras.data)
 names(ras.data) = c("cb","b","g","y", "r", "re","n1","n2")
-ras.data = reclassify(ras.data, c(-Inf,0,NA))
-ras.data = ras.data+min(minValue(ras.data))
+ras.data = reclassify(ras.data, c(-Inf,0,NA))#Specify all pixels outside of AOI to NA opposed to 0
 for (i in 1:8){
   print(i)
   #convert to TOA radiance
   ras.data[[i]] = (WV3gain[i]*(ras.data[[i]]*(radianc.conv[i,"AbsScaleFactor"]/radianc.conv[i,"EffectiveBandwidth"]))) + WV3offset[i]
+  #If conversion from DN to radiance causes negative values, add the minimum value to make the new minimum 0
+  #this was a suggestion from the data provider
+  if (min(minValue(ras.data))<0){ras.data = ras.data+ abs(min(minValue(ras.data)))}
   #convert to TOA reflectance
   ras.data[[i]] = (ras.data[[i]]*(D.es^2)*pi)/(Esun[i]*cos.sun)
   }

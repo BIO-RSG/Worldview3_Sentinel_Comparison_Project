@@ -1,19 +1,23 @@
+#This script will give you the coefficients to atmospherically correct your data once you have define the AOT
+
 ##
-rm(list=ls())
 library(readxl)
 #
+#Point to the folder where 6SV is installed our your computer
 setwd("D:\\SixSV")#For R
 shell("cd D:\\SixSV")#For command line script
 #
+#Run 2a to define the AOT then correct all bands
 dir.relative.response = "./OutData/WV3-RelativeResponse.xlsx"#filter functions
-read.inname = "./OutData/20190811/AC/input_file_"#where to save/call input file
-read.outname = "./OutData/20190811/AC/output_" #where to save/call output file
+read.inname = "./OutData/input_file_"#where to save/call input file
+read.outname = "./OutData/output_" #where to save/call output file
 #
 
 for (i in 1:8){
   #Define your input file
   tab = rep("",17)
   tab[1] = "0" #User Defined
+  #These are image specific parameters that must be pulled from the metadata
   tab[2] = "33.9 152.5 28.1 133.6 8 17"# (solar zenithal, solar azimuthal, sensor zenithal, senzor azimuthal, month, day)
   tab[3] = "2" #(Midlatitude summer)
   tab[4] = "2" #(Maritime Model)

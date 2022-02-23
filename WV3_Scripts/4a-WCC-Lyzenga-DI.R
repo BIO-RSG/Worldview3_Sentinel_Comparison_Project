@@ -1,15 +1,13 @@
-rm(list = ls())
 library("raster")
 library("rgdal")
 
-setwd("C://Users//wilsonkri//Documents//Backup-WV//20190817//")
+setwd("C:\\Where\\is\\my\\data\\")
 
 ##
-depth= raster("./Extrafiles/Depth.tif")
-raster.dat = "./StripeCorrection/PD3-use//BOA-destripe.tif"
+raster.dat = "./StripeCorrection/BOA-destripe.tif"#WV data
 raster.name.dat = c("cb","b","g","y","r","re","n1","n2")
 raster.dim.use = 5 #number of bands to use the WCC
-depth.dat = "./Extrafiles/Depth.tif"
+depth.dat = "./Extrafiles/Depth.tif"#External depth file
 write.data = "./WCC_Destripe/Lyzenga1985-ds-alldpth.tif"
 write.folder = "./WCC_Destripe/"
 shape.dat = "./WCC_BOA/Sand/"

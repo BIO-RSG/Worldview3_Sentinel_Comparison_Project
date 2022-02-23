@@ -1,5 +1,3 @@
-rm(list=ls())
-
 library("raster")
 library("caret")
 library("irr")
@@ -7,7 +5,7 @@ library("doParallel")  #Foreach Parallel Adaptor
 library("foreach")     #Provides foreach looping construct
 rasterOptions(maxmemory=7e+09,chunksize = 4e+08)
 
-setwd("E:\\Data\\Worldview\\20190817")
+setwd("C:\\Where\\is\\my\\data\\")
 
 #Read in raster dataset
 wv.dat = stack("BOA-destripe.tif",

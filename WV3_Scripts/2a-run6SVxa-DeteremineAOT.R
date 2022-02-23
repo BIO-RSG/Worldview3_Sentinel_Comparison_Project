@@ -5,25 +5,29 @@
 ##
 library(readxl)
 #
+#Point to the folder where 6SV is installed our your computer
 setwd("D:\\SixSV")#For R
 shell("cd D:\\SixSV")#For command line script
 #
 #Pre extract TOA data for various bands
-nir.ref = as.vector(read.table("./OutData/20190817/OpticallyDeepWater.txt",header=T))#this is text file for one band for ODW to define the AOT for
+#this is a vector of optically deep water over which you define the AOT
+nir.ref = as.vector(read.table("./OpticallyDeepWater.txt",header=T))#this is text file for one band for ODW to define the AOT for
 #what is the band number you are using
 band.num=8
-#WV-3 filter functions must be aqcuired from the data provider
-dir.relative.response = "./OutData/WV3-RelativeResponse.xlsx"#filter functions
+#WV-3 filter functions must be acquired from the data provider
+dir.relative.response = "./WV3-RelativeResponse.xlsx"#filter functions
 #Input and output files
-read.inname = "./OutData/20190817/AOT/input_file.txt"#where to save/call input file
-read.outname = "./OutData/20190817/AOT/output_" #where to save/call output file
+read.inname = "./OutData/AOT/input_file.txt"#where to save/call input file
+read.outname = "./OutData/AOT/output_" #where to save/call output file
 #Use this file to define your AOT
-out.sum.table = "./OutData/20190817/AOT/summaryoutput.txt"
+out.sum.table = "./OutData/AOT/summaryoutput.txt"#This file will show you how the reflectance of the optically deepwater changes with AOT
 
 #Define your ^SVinput file
 tab = rep("",17)
 tab[1] = "0" #User Defined
+#These are image specific parameters that must be pulled from the metadata
 tab[2] = "33.9 152.5 28.1 133.6 8 17"# (solar zenithal, solar azimuthal, sensor zenithal, senzor azimuthal, month, day)
+#
 tab[3] = "2" #(Midlatitude summer)
 tab[4] = "2" #(Maritime Model)
 tab[5] = "0"
