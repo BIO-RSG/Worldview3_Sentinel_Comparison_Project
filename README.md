@@ -16,7 +16,7 @@ Processing scripts for Worldview-3 imagery (WV3_Scripts)
 
 These are the processing scripts to classify the Worldview-3 as described in [2].
 
-Reference for Worldview-3 habitat maps and processing scripts:
+## Reference for Worldview-3 habitat maps and processing scripts:
 
 [1] Wilson KL, Wong MC and Devred E (2020) Branching Algorithmto Identify Bottom Habitatin the Optically Complex CoastalWaters of Atlantic Canada Using Sentinel-2 Satellite Imagery. Front. Environ. Sci. 8:579856. https://doi.org/10.3389/fenvs.2020.579856
 
