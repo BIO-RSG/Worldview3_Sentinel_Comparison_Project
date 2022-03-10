@@ -1,4 +1,4 @@
-# Worldview3_Sentinel_Comparison_Project
+# WorldView-3 and Sentinel-2 Comparison Project
 
 ## Sentinel-2 Habitat Map (S2_Data-2016-09-13-10m)
 
